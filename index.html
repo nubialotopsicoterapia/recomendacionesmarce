@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>España — Tu guía de viaje</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --cream: #F7F3EE;
+    --ink: #1A1714;
+    --terracotta: #C2603B;
+    --sand: #E8DFD0;
+    --muted: #8C7B6E;
+    --card-bg: #FFFFFF;
+    --border: #DDD5C8;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    min-height: 100vh;
+  }
+
+  /* HERO */
+  .hero {
+    background: var(--ink);
+    color: var(--cream);
+    padding: 80px 24px 64px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 60% 0%, rgba(194,96,59,0.25) 0%, transparent 65%);
+    pointer-events: none;
+  }
+
+  .hero-eyebrow {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--terracotta);
+    margin-bottom: 20px;
+  }
+
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(48px, 8vw, 88px);
+    font-weight: 400;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin-bottom: 20px;
+  }
+
+  .hero-title em {
+    font-style: italic;
+    color: var(--terracotta);
+  }
+
+  .hero-sub {
+    font-size: 15px;
+    font-weight: 300;
+    color: rgba(247,243,238,0.6);
+    max-width: 380px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  /* NAV */
+  .city-nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--cream);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: center;
+    gap: 0;
+    padding: 0 24px;
+  }
+
+  .city-nav-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--muted);
+    padding: 18px 28px;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+
+  .city-nav-btn:hover { color: var(--ink); }
+  .city-nav-btn.active {
+    color: var(--terracotta);
+    border-bottom-color: var(--terracotta);
+  }
+
+  /* SECTIONS */
+  .city-section {
+    display: none;
+    padding: 48px 24px 80px;
+    max-width: 900px;
+    margin: 0 auto;
+    animation: fadeIn 0.3s ease;
+  }
+
+  .city-section.active { display: block; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .section-header {
+    display: flex;
+    align-items: flex-end;
+    gap: 16px;
+    margin-bottom: 40px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-emoji { font-size: 40px; line-height: 1; }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 36px;
+    font-weight: 400;
+    line-height: 1;
+  }
+
+  .section-tagline {
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+
+  /* CATEGORY GRID */
+  .cat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 16px;
+  }
+
+  .cat-full { grid-column: 1 / -1; }
+
+  /* CARD */
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+  }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 18px;
+  }
+
+  .card-icon {
+    width: 32px;
+    height: 32px;
+    background: var(--sand);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    flex-shrink: 0;
+  }
+
+  .card-title {
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* SPOT LIST */
+  .spot-list { list-style: none; }
+
+  .spot-item {
+    display: flex;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--sand);
+  }
+
+  .spot-item:last-child { border-bottom: none; padding-bottom: 0; }
+  .spot-item:first-child { padding-top: 0; }
+
+  .spot-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--terracotta);
+    opacity: 0.4;
+    flex-shrink: 0;
+    margin-top: 6px;
+  }
+
+  .spot-name {
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--ink);
+    line-height: 1.4;
+  }
+
+  .spot-tip {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 3px;
+    line-height: 1.5;
+    font-style: italic;
+  }
+
+  /* ROUTE CARD */
+  .route-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 32px;
+    margin-top: 4px;
+  }
+
+  .route-label {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--terracotta);
+    margin-bottom: 14px;
+  }
+
+  .route-stops { display: flex; flex-direction: column; }
+
+  .route-stop {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 7px 0;
+    position: relative;
+  }
+
+  .route-stop:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    left: 11px;
+    top: 28px;
+    width: 1px;
+    height: calc(100% - 14px);
+    background: var(--border);
+  }
+
+  .stop-num {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: var(--cream);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--muted);
+    flex-shrink: 0;
+    z-index: 1;
+    position: relative;
+  }
+
+  .stop-name {
+    font-size: 13.5px;
+    color: var(--ink);
+    line-height: 1.5;
+    padding-top: 2px;
+  }
+
+  /* FOOTER */
+  .footer {
+    text-align: center;
+    padding: 32px 24px;
+    font-size: 12px;
+    color: var(--muted);
+    border-top: 1px solid var(--border);
+  }
+
+  .footer span { color: var(--terracotta); }
+
+  @media (max-width: 600px) {
+    .hero { padding: 60px 20px 48px; }
+    .city-nav-btn { padding: 16px 16px; font-size: 12px; }
+    .cat-grid { grid-template-columns: 1fr; }
+    .route-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="city-nav">
+  <button class="city-nav-btn active" onclick="showCity('madrid')">🏛 Madrid</button>
+  <button class="city-nav-btn" onclick="showCity('barcelona')">🏙 Barcelona</button>
+  <button class="city-nav-btn" onclick="showCity('mallorca')">🌊 Mallorca</button>
+</nav>
+
+<!-- ======= MADRID ======= -->
+<section class="city-section active" id="madrid">
+  <div class="section-header">
+    <div class="section-emoji">🇪🇸</div>
+    <div>
+      <div class="section-title">Madrid</div>
+    </div>
+  </div>
+
+  <div class="cat-grid">
+
+    <!-- Rutas -->
+    <div class="card cat-full">
+      <div class="card-header">
+        <div class="card-icon">🗺</div>
+        <div class="card-title">Rutas para conocer la ciudad</div>
+      </div>
+      <div class="route-grid">
+        <div>
+          <div class="route-label">Ruta 1</div>
+          <div class="route-stops">
+            <div class="route-stop"><div class="stop-num">1</div><span class="stop-name">Parque El Retiro</span></div>
+            <div class="route-stop"><div class="stop-num">2</div><span class="stop-name">Puerta de Alcalá</span></div>
+            <div class="route-stop"><div class="stop-num">3</div><span class="stop-name">Museo del Prado</span></div>
+            <div class="route-stop"><div class="stop-num">4</div><span class="stop-name">Palacio de Cibeles</span></div>
+          </div>
+        </div>
+        <div>
+          <div class="route-label">Ruta 2</div>
+          <div class="route-stops">
+            <div class="route-stop"><div class="stop-num">1</div><span class="stop-name">Sol</span></div>
+            <div class="route-stop"><div class="stop-num">2</div><span class="stop-name">Plaza Mayor</span></div>
+            <div class="route-stop"><div class="stop-num">3</div><span class="stop-name">Mercado de San Miguel</span></div>
+            <div class="route-stop"><div class="stop-num">4</div><span class="stop-name">Catedral de la Almudena</span></div>
+            <div class="route-stop"><div class="stop-num">5</div><span class="stop-name">Palacio Real</span></div>
+            <div class="route-stop"><div class="stop-num">6</div><span class="stop-name">Plaza España</span></div>
+            <div class="route-stop"><div class="stop-num">7</div><span class="stop-name">Templo de Debod</span></div>
+            <div class="route-stop"><div class="stop-num">8</div><span class="stop-name">Gran Vía</span></div>
+            <div class="route-stop"><div class="stop-num">9</div><span class="stop-name">Tirso de Molina</span></div>
+            <div class="route-stop"><div class="stop-num">10</div><span class="stop-name">La Latina</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Comer & Beber -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon">🍽</div>
+        <div class="card-title">Comer & Beber</div>
+      </div>
+      <ul class="spot-list">
+        <li class="spot-item"><div class="spot-dot"></div><div><div class="spot-name">Mercado de San Miguel</div><div class="spot-tip">Turístico pero lindo</div></div></li>
+        <li class="spot-item"><div class="spot-dot"></div><div><div class="spot-name">Mercado de San Antón</div></div></li>
+        <li class="spot-item"><div class="spot-dot"></div><div><div class="spot-name">Bares por Malasaña y Chueca</div></div></li>
+        <li class="spot-item"><div class="spot-dot"></div><div><div class="spot-name">Caminar por Cava Baja en La Latina</div><div class="spot-tip">Muchos sitios de tapas</div></div></li>
+        <li class="spot-item"><div class="spot-dot"></div><div><div class="spot-name">El Pez Tortilla</div></div></li>
+        <li class="spot-item"><div class="spot-dot"></div><div><div class="spot-name">Lamucca</div></div></li>
+        <li class="spot-item"><div class="spot-dot"></div><div><div class="spot-name">Viva Madrid</div></div></li>
+        <li class="spot-item"><div class="spot-dot"></div><div><div class="spot-name">Bodega de la Ardosa</div></div></li>
+        <li class="spot-item"><div class="spot-dot"></div><div><div class="spot-name">Macera Taller Bar</div></div></li>
+        <li class="spot-item"><div class="spot-dot"></div><div><div class="spot-name">De Pita Madre</div></div></li>
+        <li class="spot-item"><div class="spot-dot"></div><div><div class="spot-name">Casa Dani</div></div></li>
+        <li class="spot-item"><div class="spot-dot"></div><div><div class="spot-name">La Analógica Hifi</div></div></li>
+        <li class="spot-item"><div class="spot-dot"></div><div><div class="spot-name">Bar Sidi</div><div class="spot-tip">Bar tradicional español, buenas patatas y aquí es donde te dije que los torreznos son increíbles</div></div></li>
+        <li class="spot-item"><div class="spot-dot"></div><div><div class="spot-name">Alto Bardero</div></div></li>
+        <li class="spot-item"><div class="spot-dot"></div><div><div class="spot-name">La Buena Cerveza</div></div></li>
+      </ul>
+    </div>
+
+    <!-- Terrazas -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon">🌇</div>
+        <div class="card-title">Terrazas</div>
+      </div>
+      <ul class="spot-list">
+        <li class="spot-item"><div class="spot-dot"></div><div><div class="spot-name">Terraza del Riu</div><div class="spot-tip">Ir temprano, se llena mucho pero la vista es increíble</div></div></li>
+        <li class="spot-item"><div class="spot-dot"></div><div><div class="spot-name">Ella Sky Bar</div></div></li>
+        <li class="spot-item"><div class="spot-dot"></div><div><div class="spot-name">Le Tavernier</div><div class="spot-tip">A la que no pudimos entrar porque había evento</div></div></li>
+        <li class="spot-item"><div class="spot-dot"></div><div><div class="spot-name">Picalagartos</div></div></li>
+      </ul>
+    </div>
+
+  </div>
+</section>
+
+<!-- ======= BARCELONA ======= -->
+<section class="city-section" id="barcelona">
+  <div class="section-header">
+    <div class="section-emoji">🏙️</div>
+    <div>
+      <div class="section-title">Barcelona</div>
+    </div>
+  </div>
+
+  <div class="cat-grid">
+
+    <!-- Cultura -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon">🏛</div>
+        <div class="card-title">Cultura & Monumentos</div>
+      </div>
+      <ul class="spot-list">
+        <li class="spot-item"><div class="spot-dot"></div><div><div class="spot-name">Sagrada Família</div></div></li>
+        <li class="spot-item"><div class="spot-dot"></div><div><div class="spot-name">Casa Batlló</div><div class="spot-tip">Comprar entrada</div></div></li>
+        <li class="spot-item"><div class="spot-dot"></div><div><div class="spot-name">Park Güell</div><div class="spot-tip">Comprar entrada</div></div></li>
+        <li class="spot-item"><div class="spot-dot"></div><div><div class="spot-name">Camp Nou</div><div class="spot-tip">Obvio</div></div></li>
+        <li class="spot-item"><div class="spot-dot"></div><div><div class="spot-name">Montjuïc</div><div class="spot-tip">Mirador preciosooo mega tienen que ir</div></div></li>
+      </ul>
+    </div>
+
+    <!-- Comer & Beber -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon">🍽</div>
+        <div class="card-title">Comer & Beber</div>
+      </div>
+      <ul class="spot-list">
+        <li class="spot-item"><div class="spot-dot"></div><div><div class="spot-name">La Pepita</div><div class="spot-tip">Mejores tapas que existen, mucho mejor ir con Nubia</div></div></li>
+        <li class="spot-item"><div class="spot-dot"></div><div><div class="spot-name">Jon Cake & Coffee</div><div class="spot-tip">Tarta de queso deli</div></div></li>
+        <li class="spot-item"><div class="spot-dot"></div><div><div class="spot-name">Mercado de La Boqueria</div></div></li>
+        <li class="spot-item"><div class="spot-dot"></div><div><div class="spot-name">Mercado de Sant Antoni</div></div></li>
+      </ul>
+    </div>
+
+    <!-- Barrios -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon">🚶</div>
+        <div class="card-title">Barrios para caminar</div>
+      </div>
+      <ul class="spot-list">
+        <li class="spot-item"><div class="spot-dot"></div><div><div class="spot-name">Barrio Gótico</div><div class="spot-tip">Catedral de Barcelona · Mural del Beso · Pont del Bisbe</div></div></li>
+        <li class="spot-item"><div class="spot-dot"></div><div><div class="spot-name">El Born</div></div></li>
+        <li class="spot-item"><div class="spot-dot"></div><div><div class="spot-name">Gràcia</div></div></li>
+      </ul>
+    </div>
+
+    <!-- Naturaleza -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon">🏖</div>
+        <div class="card-title">Naturaleza & Playa</div>
+      </div>
+      <ul class="spot-list">
+        <li class="spot-item"><div class="spot-dot"></div><div><div class="spot-name">Playa de la Barceloneta</div></div></li>
+      </ul>
+    </div>
+
+  </div>
+</section>
+
+<!-- ======= MALLORCA ======= -->
+<section class="city-section" id="mallorca">
+  <div class="section-header">
+    <div class="section-emoji">🌊</div>
+    <div>
+      <div class="section-title">Mallorca</div>
+    </div>
+  </div>
+
+  <div class="cat-grid">
+
+    <!-- Playas -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon">🏖</div>
+        <div class="card-title">Playas & Calas</div>
+      </div>
+      <ul class="spot-list">
+        <li class="spot-item"><div class="spot-dot"></div><div><div class="spot-name">Cala Major</div><div class="spot-tip">Muy fácil de ir</div></div></li>
+        <li class="spot-item"><div class="spot-dot"></div><div><div class="spot-name">Cala Mondragó</div><div class="spot-tip">Espectacular</div></div></li>
+        <li class="spot-item"><div class="spot-dot"></div><div><div class="spot-name">Es Trenc</div></div></li>
+        <li class="spot-item"><div class="spot-dot"></div><div><div class="spot-name">Cala Sa Calobra</div><div class="spot-tip">Un poco menos fácil el acceso pero es wow</div></div></li>
+        <li class="spot-item"><div class="spot-dot"></div><div><div class="spot-name">Mirador de Sa Foradada</div></div></li>
+        <li class="spot-item"><div class="spot-dot"></div><div><div class="spot-name">Caló des Moro</div></div></li>
+      </ul>
+    </div>
+
+    <!-- Extras -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon">✨</div>
+        <div class="card-title">Extras</div>
+      </div>
+      <ul class="spot-list">
+        <li class="spot-item"><div class="spot-dot"></div><div><div class="spot-name">Caminar Casco Antiguo de Palma</div></div></li>
+        <li class="spot-item"><div class="spot-dot"></div><div><div class="spot-name">Comer Ensaimadas</div></div></li>
+      </ul>
+    </div>
+
+  </div>
+</section>
+
+<script>
+  function showCity(city) {
+    document.querySelectorAll('.city-section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.city-nav-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(city).classList.add('active');
+    event.currentTarget.classList.add('active');
+    window.scrollTo({ top: document.querySelector('.city-nav').offsetTop, behavior: 'smooth' });
+  }
+</script>
+
+</body>
+</html>
